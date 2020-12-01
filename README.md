@@ -1,3 +1,9 @@
+# 命令参数解析器 - cargparser
+简单命令参数解析器, 支持子命令,并且子命令可以继承父命令已有的命令
+
+### 列子
+`test/main.c`
+```
 #include <stdio.h>
 #include "cargparser.h"
 
@@ -58,4 +64,14 @@ extern void client_cmd(cargparser_args* args){
     printf("host: %s\n", host);
     printf("client: %s\n", client);
 }
+```
 
+### 测试
+- **Input**:  
+`./test server -s 100 --host 0.0.0.0 --port 8080`
+- **Output**:  
+    ```
+    port: 8080
+    host: 0.0.0.0
+    server: 100
+    ```
