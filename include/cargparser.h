@@ -71,14 +71,10 @@ typedef struct cargparser_{
      * 参数解析好后,应该做的回调
      * */
     void (*handler)(cargparser_args *);
+
+    char *description;
 }cargparser;
 
-
-/**
- *
- * 初始化解析器
- * */
-extern int init_parser(cargparser* parser);
 
 /**
  * 开始解析

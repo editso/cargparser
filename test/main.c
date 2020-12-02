@@ -23,15 +23,15 @@ struct option client_options[] = {
 
 // 子命令
 cargparser sub_cmd[] ={
-/**       命令             选项          选项数量               子命令    子命令数量      处理命令   */
-        {"server", server_options, len(server_options),         0,      0,       server_cmd},
-        {"client", client_options, len(client_options),         0,      0,       client_cmd},
+/**       命令             选项          选项数量               子命令    子命令数量      处理命令        描述信息*/
+        {"server", server_options, len(server_options),         0,      0,       server_cmd, "创建一个服务端"},
+        {"client", client_options, len(client_options),         0,      0,       client_cmd, "创建一个客户端"},
 };
 
 /**
  * test server|client|stop
  * */
-cargparser parser = {"test", options, len(options), sub_cmd, len(sub_cmd)};
+cargparser parser = {"test", options, len(options), sub_cmd, len(sub_cmd), 0};
 
 
 int main(int argv, char **args){
@@ -39,6 +39,7 @@ int main(int argv, char **args){
     parse_main(&parser, &arg, argv, args);
     cargparser_call(&arg);
 }
+
 
 extern void server_cmd(cargparser_args* args){
     char *port = get_argument(args, "port", "9999");

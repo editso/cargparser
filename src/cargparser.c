@@ -64,6 +64,11 @@ extern int cargparser_free(_args *args);
  * */
 extern struct cargparser_array* make_cargparser_array();
 
+/**
+ * usage
+ * */
+extern void cargparser_usage(cargparser *parser, cargparser* parent);
+
 extern struct cargparser_array* make_cargparser_array(){
     struct cargparser_array *array = calloc(1, sizeof(struct cargparser_array));
     array->capacity = 1;
@@ -140,10 +145,39 @@ extern int cargparser_parse(cargparser *parser, cargparser_argument* argument, c
     return 1;
 }
 
-void usage(cargparser* parser){
+extern void usage(cargparser* parser){
     printf("usage: %s", parser->cmd);
-    struct option *op;
+    cargparser_usage(parser, 0);
+    printf("\n");
 }
+
+
+extern void cargparser_usage(cargparser* parser, cargparser* parent){
+    struct option *op;
+    if (parent)
+        printf("[%s", parser->cmd);
+    for (int i = 0; i < parser->op_size; ++i) {
+        op = parser->options + i;
+        if (*op->keyword)
+            printf("[%s", *op->keyword);
+        if (*(op->keyword + 1))
+            printf("|%s", *(op->keyword + 1));
+        printf("]");
+    }
+    if (parent)
+        printf("]");
+    for (int i = 0; i < parser->sub_size; ++i) {
+        cargparser_usage(parser->sub + i, parser);
+    }
+    if (parser->sub_size > 0)
+        printf("\nkeyword:");
+    cargparser *ps;
+    for (int i = 0; i < parser->sub_size; ++i) {
+        ps = parser->sub + i;
+        printf("\n%s: %s", ps->cmd, ps->description);
+    }
+}
+
 
 extern int cargparser_add(struct cargparser_array* array, void *keyword){
     if (! array && ! keyword) return 0;
